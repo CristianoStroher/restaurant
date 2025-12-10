@@ -4,7 +4,9 @@ import 'package:restaurant/models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
 
-  const SettingsScreen({ super.key });
+  final Function(Settings) onSettingsChanged;
+
+  const SettingsScreen({ super.key, required this.onSettingsChanged });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -18,13 +20,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     String title,
     String subbtitle,
     bool value,
-    Function onChanged,
+    Function(bool) onChanged, // função que recebe um bool como parâmetro
   ) {
-     return SwitchListTile.adaptive(
+     return SwitchListTile.adaptive( // SwitchListTile.adaptive se adapta ao sistema operacional
       title: Text(title),
       subtitle: Text(subbtitle),                                                                                                
       value: value,
-      onChanged: onChanged as void Function(bool)?, // indiquei o tipo de função esperada
+      onChanged: (value) { // função chamada quando o switch for alterado
+        onChanged(value); // atualiza o valor do switch
+        widget.onSettingsChanged(settings); // notifica a mudança de configurações
+     }, // indiquei o tipo de função esperada
      ); 
 
   }
