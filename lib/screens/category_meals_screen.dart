@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant/components/main_drawer.dart';
 import 'package:restaurant/components/meal_item.dart';
 import 'package:restaurant/data/dummy_data.dart';
 import 'package:restaurant/models/category.dart';
@@ -18,6 +19,7 @@ class CategoryMealsScreen extends StatelessWidget {
 
        return Scaffold(
            appBar: AppBar(title: Text(category.title),),
+           drawer: const MainDrawer(),
            body: ListView.builder(
              itemCount: categoryMeals.length,
              itemBuilder: (ctx, index) {
