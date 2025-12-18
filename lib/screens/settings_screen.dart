@@ -4,9 +4,10 @@ import 'package:restaurant/models/settings.dart';
 
 class SettingsScreen extends StatefulWidget {
 
-  final Function(Settings) onSettingsChanged;
+  final Settings settings; // nasce parametro e vive como atrituto para manter o estado das configurações
+  final Function(Settings) onSettingsChanged; // (idem acima)parametro que é uma função que recebe as configurações atualizadas como parâmetro
 
-  const SettingsScreen({ super.key, required this.onSettingsChanged });
+  const SettingsScreen({ super.key, required this.onSettingsChanged, required this.settings });
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -14,7 +15,29 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
 
-  var settings = Settings();
+  
+  late Settings settings; // atributo para manter o estado das configurações na tela.
+    /* Explicação: Ele é inicializado no initState. Eu não posso inicializar ele diretamente
+    com widget.settings porque o widget ainda não está disponível no momento da declaração dos
+    atributos.
+
+    Outra coisa importante é que eu uso "late" para indicar que esse atributo será inicializado
+    posteriormente, mas antes de ser usado.
+
+    Dessa forma, evito problemas de null safety. eu preciso manter esse atributo separado de
+    widget.settings porque eu quero que as mudanças feitas na tela de configurações só sejam
+    aplicadas quando o usuário interagir com os switches. Se eu usasse widget.settings
+    diretamente, qualquer mudança feita nos switches seria refletida imediatamente
+    no objeto original, o que não é o comportamento desejado.
+    
+    Portanto, uso o método initState para fazer essa inicialização assim que o estado for criado.
+    */
+
+  @override
+  void initState() {
+    super.initState();
+    settings = widget.settings;
+  }
 
   Widget _createSwitch(
     String title,

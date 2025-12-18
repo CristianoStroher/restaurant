@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant/components/main_drawer.dart';
 import 'package:restaurant/components/meal_item.dart';
-import 'package:restaurant/data/dummy_data.dart';
 import 'package:restaurant/models/category.dart';
 import 'package:restaurant/models/meal.dart';
+
+
+// Tela que exibe as refeições de uma categoria específica
 
 class CategoryMealsScreen extends StatelessWidget {
   
@@ -15,6 +17,7 @@ class CategoryMealsScreen extends StatelessWidget {
 
    @override
    Widget build(BuildContext context) {
+    // Recupera a categoria passada como argumento e serve para filtrar as refeições
     final category = ModalRoute.of(context)!.settings.arguments as Category;
 
     // Criado uma variável para armazenar as refeições filtradas pela categoria selecionada

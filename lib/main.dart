@@ -21,11 +21,27 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  List<Meal> _availableMeals = dummyMeals;
+  Settings settings = Settings(); // configurações iniciais padrão
+  List<Meal> _availableMeals = dummyMeals; // lista de refeições disponíveis inicialmente com todas as refeições
+  List<Meal> _favoriteMeals = []; // lista de refeições favoritas
 
-  // Função para filtrar as refeições com base nas configurações
+  // Função para adicionar ou remover uma refeição dos favoritos
+  void _onToggleFavorite(Meal meal) {
+    setState(() {
+      _favoriteMeals.contains(meal)
+          ? _favoriteMeals.remove(meal)
+          : _favoriteMeals.add(meal);
+    });
+  }
+
+  bool _isMealFavorite(Meal meal) {
+    return _favoriteMeals.contains(meal);
+  }
+
+  // Função para filtrar as refeições com base nas configurações e atualizar o estado
   void _filterMeals(Settings settings) {
     setState(() {
+      this.settings = settings; // atualiza as configurações atuais. Importante colocar this para diferenciar o atributo do parâmetro
       _availableMeals = dummyMeals.where((meal) {
         if (settings.isGlutenFree && !meal.isGlutenFree) {
           return false;
@@ -82,10 +98,10 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       routes: {
-        AppRoutes.home: (ctx) => const TabsScreen(), // rota inicial
+        AppRoutes.home: (ctx) => TabsScreen(_favoriteMeals), // rota inicial
         AppRoutes.categoryMeals: (ctx) => CategoryMealsScreen(meals: _availableMeals), // rota para a tela de refeições por categoria
-        AppRoutes.mealDetail: (ctx) => const MealDetailScreen(), // rota para a tela de detalhes da refeição
-        AppRoutes.settings: (ctx) => SettingsScreen(onSettingsChanged: _filterMeals), // rota para tela de configurações
+        AppRoutes.mealDetail: (ctx) => MealDetailScreen(onToggleFavorite: _onToggleFavorite, isFavorite: _isMealFavorite), // rota para a tela de detalhes da refeição
+        AppRoutes.settings: (ctx) => SettingsScreen(onSettingsChanged: _filterMeals, settings: settings), // rota para tela de configurações  que passo as configurações atuais e a função para atualizar as refeições
       },
     );
   }
